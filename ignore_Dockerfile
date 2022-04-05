@@ -1,0 +1,27 @@
+# This is the Dockerfile before we add layers for optimizing what gets run
+# Choose basic image - alpine is a very lightweight linux flavour
+FROM node:lts-alpine
+
+# Specify a working directory
+WORKDIR /app
+
+# Copy project folder to /app
+COPY . .
+
+# --only=production: install packages without dev dependencies
+RUN npm install --only=production 
+
+# --prefix client is a command from our own package.json
+RUN npm run build --prefix client
+
+# Run the image via a specific user, otherwise it would use root
+USER node
+
+# Because of this command in the client app:
+# "build": "BUILD_PATH=../server/public react-scripts build",
+# we store a build version on the client side so no need to start client (check app.js) 
+# CMD: gives instructions on what to run when the container starts
+CMD ["npm", "start", "--prefix", "server"]
+
+# Choose what port to expose
+EXPOSE 8000

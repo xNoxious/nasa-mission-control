@@ -1,0 +1,9 @@
+# Need to exclude node_modules because my node_modules are specific 
+# to my OS but the Dockerfile uses a linux flavour called alpine 
+# which will likely have different needs for its modules.
+*/node_modules
+
+.git
+
+# Ensure the client folder in server is freshly-generated
+server/public
