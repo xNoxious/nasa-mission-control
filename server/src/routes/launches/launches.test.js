@@ -1,6 +1,7 @@
 const request = require('supertest');
 require('dotenv').config();
 const app = require('../../app');
+const { loadPlanetsData } = require('../../models/planets.model');
 const { mongoConnect, mongoDisconnect } = require('../../services/mongo');
 
 describe('Launches API', () => {
@@ -12,6 +13,7 @@ describe('Launches API', () => {
             directly on our live database.
         */
         await mongoConnect();
+        await loadPlanetsData();
     });
 
     afterAll(async () => {
