@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { 
+import {
   withStyles,
   Appear,
   Link,
@@ -7,6 +7,7 @@ import {
   Table,
   Words,
 } from "arwes";
+import { isMobile } from 'react-device-detect';
 
 import Clickable from "../components/Clickable";
 
@@ -18,7 +19,7 @@ const styles = () => ({
 });
 
 const Upcoming = props => {
-  const { 
+  const {
     entered,
     launches,
     classes,
@@ -30,7 +31,7 @@ const Upcoming = props => {
       .map((launch) => {
         return <tr key={String(launch.flightNumber)}>
           <td>
-            <Clickable style={{color:"red"}}>
+            <Clickable style={{ color: "red" }}>
               <Link className={classes.link} onClick={() => abortLaunch(launch.flightNumber)}>
                 ✖
               </Link>
@@ -45,27 +46,51 @@ const Upcoming = props => {
       });
   }, [launches, abortLaunch, classes.link]);
 
-  return <Appear id="upcoming" animate show={entered}>
-    <Paragraph>Upcoming missions including both SpaceX launches and newly scheduled Zero to Mastery rockets.</Paragraph>
-    <Words animate>Warning! Clicking on the ✖ aborts the mission.</Words>
-    <Table animate show={entered}>
-      <table style={{tableLayout: "fixed"}}>
-        <thead>
-          <tr>
-            <th style={{width: "3rem"}}></th>
-            <th style={{width: "3rem"}}>No.</th>
-            <th style={{width: "10rem"}}>Date</th>
-            <th style={{width: "11rem"}}>Mission</th>
-            <th style={{width: "11rem"}}>Rocket</th>
-            <th>Destination</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tableBody}
-        </tbody>
-      </table>
-    </Table>
-  </Appear>;
+  if (!isMobile) {
+    return <Appear id="upcoming" animate show={entered}>
+      <Paragraph>Upcoming missions including both SpaceX launches and newly scheduled Zero to Mastery rockets.</Paragraph>
+      <Words animate>Warning! Clicking on the ✖ aborts the mission.</Words>
+      <Table animate show={entered}>
+        <table style={{ tableLayout: "fixed" }}>
+          <thead>
+            <tr>
+              <th style={{ width: "3rem" }}></th>
+              <th style={{ width: "3rem" }}>No.</th>
+              <th style={{ width: "10rem" }}>Date</th>
+              <th style={{ width: "11rem" }}>Mission</th>
+              <th style={{ width: "11rem" }}>Rocket</th>
+              <th>Destination</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableBody}
+          </tbody>
+        </table>
+      </Table>
+    </Appear>;
+  } else {
+    return <Appear id="upcoming" animate show={entered}>
+      <Paragraph>Upcoming missions including both SpaceX launches and newly scheduled rockets.</Paragraph>
+      <Words animate>Warning! Clicking on the ✖ aborts the mission.</Words>
+      <Table style={{ width: "85vw" }} animate show={entered}>
+        <table style={{ tableLayout: "fixed" }}>
+          <thead>
+            <tr>
+              <th style={{ width: "3rem" }}></th>
+              <th style={{ width: "3rem" }}>No.</th>
+              <th style={{ width: "10rem" }}>Date</th>
+              <th style={{ width: "11rem" }}>Mission</th>
+              <th style={{ width: "7rem" }}>Rocket</th>
+              <th style={{ width: "8rem" }}>Destination</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableBody}
+          </tbody>
+        </table>
+      </Table>
+    </Appear>;
+  }
 }
 
 export default withStyles(styles)(Upcoming);
